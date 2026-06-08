@@ -1,0 +1,211 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  DOCTOR
+  PATIENT
+  RECEPTIONIST
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum LabStatus {
+  PENDING
+  SAMPLE_COLLECTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model User {
+  id String @id @default(cuid())
+
+  name     String
+  email    String @unique
+  password String
+
+  role Role
+
+  createdAt DateTime @default(now())
+}
+
+model Patient {
+  id             String   @id @default(cuid())
+
+  patientCode    String   @unique
+
+  firstName      String
+  lastName       String
+
+  age            Int
+  gender         String
+
+  bloodGroup     String?
+
+  phone          String
+  email          String?
+
+  address        String
+
+  emergencyPhone String?
+
+  allergies      String?
+
+  diseaseHistory String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  appointments Appointment[]
+  labRequests LabRequest[]
+}
+
+model Doctor {
+  id             String      @id @default(cuid())
+
+  doctorCode     String      @unique
+
+  name           String
+  email          String      @unique
+
+  specialization String
+
+  experience     Int
+
+  qualification  String?
+
+  phone          String
+
+  gender         String?
+
+  address        String?
+
+  departmentId   String
+
+  department     Department  @relation(fields: [departmentId], references: [id])
+
+  appointments   Appointment[]
+  labRequests LabRequest[]
+
+  createdAt      DateTime    @default(now())
+}
+
+model Appointment {
+  id String @id @default(cuid())
+
+  patientId String
+  doctorId  String
+
+  date       DateTime
+  time       String
+  department String
+
+   status AppointmentStatus @default(PENDING)
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+
+  consultation Consultation?
+
+  createdAt DateTime @default(now())
+}
+
+model Consultation {
+  id String @id @default(cuid())
+
+  appointmentId String @unique
+
+  symptoms String?
+  diagnosis String?
+  notes String?
+
+  bloodPressure String?
+  pulse String?
+  temperature String?
+  oxygenLevel String?
+
+  height String?
+  weight String?
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  prescriptions Prescription[]
+
+  createdAt DateTime @default(now())
+}
+
+model Prescription {
+  id String @id @default(cuid())
+
+  consultationId String
+
+  medicine  String
+  dosage    String
+  frequency String
+  duration  String
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  doctors     Doctor[]
+}
+
+model LabRequest {
+  id String @id @default(cuid())
+
+  patientId String
+  doctorId String
+
+  testName String
+
+  status LabStatus @default(PENDING)
+
+  notes String?
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+
+  report LabReport?
+
+  createdAt DateTime @default(now())
+}
+
+model LabReport {
+  id String @id @default(cuid())
+
+  labRequestId String @unique
+
+  result String
+
+  reportFile String?
+
+  labRequest LabRequest @relation(fields: [labRequestId], references: [id])
+
+  createdAt DateTime @default(now())
+}
