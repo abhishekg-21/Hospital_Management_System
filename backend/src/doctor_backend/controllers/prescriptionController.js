@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 //  backend/src/doctor_backend/controllers/prescriptionController.js
 
 const prisma = require("../config/prisma");

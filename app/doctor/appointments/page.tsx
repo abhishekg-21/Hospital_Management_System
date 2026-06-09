@@ -55,7 +55,7 @@ export default function AppointmentsPage() {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:5000/api/appointments",
+        "http://localhost:5000/api/doctor_appointmentRoutes/appointments",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -136,7 +136,7 @@ export default function AppointmentsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post("http://localhost:5000/api/appointments", formData, {
+      await axios.post("http://localhost:5000/api/appointment", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -171,7 +171,7 @@ export default function AppointmentsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.delete(`http://localhost:5000/api/appointments/${id}`, {
+      await axios.delete(`http://localhost:5000/api/appointment/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

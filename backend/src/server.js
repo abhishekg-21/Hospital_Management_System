@@ -53,10 +53,10 @@ const departmentRoutes = require("./Admin_Backend/routes/departmentRoutes");
 app.use("/api/departments", departmentRoutes);
 
 /* Doctor Dashboard Overview */
-// const appointmentRoutes = require("./Doctor_Backend/routes/appointmentRoutes");
+// const doctor_appointmentRoutes = require("./doctor_backend/routes/appointmentRoutes");
 
 /* API Route of Doctor Dashboard */
-// app.use("/api/appointments", appointmentRoutes);
+// app.use("/api/appointment", doctor_appointmentRoutes);
 
 /* Patient Dashboard Overview */
 const patientRoutes = require("./patient_backend/routes/patientRoutes");
@@ -68,7 +68,7 @@ app.use("/api/patients", patientRoutes);
 const doctorRoutes = require("./Admin_Backend/routes/doctorRoutes");
 
 /* API Route of Admin Dashboard Doctor*/
-app.use("/Admin_Backend/api/doctors", doctorRoutes);
+app.use("/api/doctors", doctorRoutes);
 
 /* Doctor Dashboard Consultation Overview */
 const consultationRoutes = require("./doctor_backend/routes/consultationRoutes");
@@ -87,3 +87,17 @@ const labRoutes = require("./doctor_backend/routes/labRoutes");
 
 /* API Route of Doctor Dashboard lab_reports*/
 app.use("/api/labs", labRoutes);
+
+/* Doctor Dashboard follow-up Overview */
+const followUpRoutes = require("./doctor_backend/routes/followUpRoutes");
+
+/* API Route of Doctor Dashboard follow-up*/
+app.use("/api/followups", followUpRoutes);
+
+const admissionRoutes = require("./doctor_backend/routes/admissionRoutes");
+
+app.use("/api/admissions", admissionRoutes);
+
+const billRoutes = require("./Admin_Backend/routes/billRoutes");
+
+app.use("/api/bill", billRoutes);

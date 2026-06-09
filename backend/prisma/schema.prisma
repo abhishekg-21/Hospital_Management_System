@@ -34,6 +34,29 @@ enum LabStatus {
   COMPLETED
 }
 
+enum FollowUpStatus {
+  PENDING
+  COMPLETED
+  MISSED
+}
+
+enum BedStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum AdmissionStatus {
+  ADMITTED
+  DISCHARGED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PARTIAL
+}
+
 model User {
   id String @id @default(cuid())
 
@@ -75,6 +98,9 @@ model Patient {
 
   appointments Appointment[]
   labRequests LabRequest[]
+  followUps FollowUp[]
+  admissions Admission[]
+   bills Bill[]
 }
 
 model Doctor {
@@ -103,6 +129,8 @@ model Doctor {
 
   appointments   Appointment[]
   labRequests LabRequest[]
+  followUps FollowUp[]
+  admissions Admission[]
 
   createdAt      DateTime    @default(now())
 }
@@ -206,6 +234,122 @@ model LabReport {
   reportFile String?
 
   labRequest LabRequest @relation(fields: [labRequestId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model FollowUp {
+  id String @id @default(cuid())
+
+  patientId String
+  doctorId String
+
+  nextVisitDate DateTime
+
+  reason String
+
+  notes String?
+
+  status FollowUpStatus @default(PENDING)
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Room {
+  id String @id @default(cuid())
+
+  roomNumber String @unique
+
+  wardId String
+
+  ward Ward @relation(  fields: [wardId],  references: [id])
+
+  beds Bed[]
+
+  createdAt DateTime @default(now())
+}
+
+model Ward {
+  id String @id @default(cuid())
+
+  name String @unique
+
+  description String?
+
+  rooms Room[]
+
+  createdAt DateTime @default(now())
+}
+
+
+model Bed {
+  id String @id @default(cuid())
+
+  bedNumber String @unique
+
+  roomId String
+
+  status BedStatus @default(AVAILABLE)
+
+  room Room @relation( fields: [roomId],  references: [id]  )
+
+  admissions Admission[]
+}
+
+model Admission {
+  id String @id @default(cuid())
+
+  patientId String
+
+  doctorId String
+
+  bedId String
+
+  diagnosis String
+
+  admissionDate DateTime @default(now())
+
+  dischargeDate DateTime?
+
+  status AdmissionStatus @default(ADMITTED)
+
+  patient Patient @relation(  fields: [patientId],  references: [id]  )
+
+  doctor Doctor @relation(  fields: [doctorId],  references: [id])
+
+  bed Bed @relation(  fields: [bedId],  references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Bill {
+  id String @id @default(cuid())
+
+  billNumber String @unique
+
+  patientId String
+
+  patient Patient @relation(fields: [patientId],  references: [id])
+
+  consultationFee Float @default(0)
+
+  labFee Float @default(0)
+
+  roomFee Float @default(0)
+
+  medicineFee Float @default(0)
+
+  otherCharges Float @default(0)
+
+  totalAmount Float
+
+  paidAmount Float @default(0)
+
+  paymentStatus PaymentStatus @default(PENDING)
 
   createdAt DateTime @default(now())
 }
