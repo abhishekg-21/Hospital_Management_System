@@ -89,7 +89,7 @@ export default function DoctorSidebar() {
           </Link>
 
           <Link
-            href="/admin/appointments"
+            href="/doctor/appointments"
             className="flex items-center gap-3 hover:bg-blue-600 p-3 rounded-xl"
           >
             <FaCalendarCheck />

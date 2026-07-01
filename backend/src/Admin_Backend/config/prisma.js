@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { PrismaClient } = require("@prisma/client");
+//  backend/src/Admin_Backend/config/prisma.js
 
-const prisma = new PrismaClient();
+// const { PrismaClient } = require("@prisma/client");
 
-module.exports = prisma;
+// const prisma = new PrismaClient();
+
+// module.exports = prisma;

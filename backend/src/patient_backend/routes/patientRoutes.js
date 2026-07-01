@@ -5,26 +5,20 @@ const express = require("express");
 
 const router = express.Router();
 
-const {
-  getPatients,
-  getPatient,
-  createPatient,
-  updatePatient,
-  deletePatient,
-} = require("../controllers/patientController");
+const controller = require("../controllers/patientController");
 
-const authMiddleware = require("../middleware/authMiddleware");
+const auth = require("../middleware/authMiddleware");
 
-router.use(authMiddleware);
+router.get("/profile", auth, controller.getProfile);
 
-router.get("/", getPatients);
+router.get("/appointments", auth, controller.getAppointments);
 
-router.get("/:id", getPatient);
+router.get("/prescriptions", auth, controller.getPrescriptions);
 
-router.post("/", createPatient);
+router.get("/reports", auth, controller.getReports);
 
-router.put("/:id", updatePatient);
+router.get("/payments", auth, controller.getPayments);
 
-router.delete("/:id", deletePatient);
+router.get("/dashboard", auth, controller.getDashboard);
 
 module.exports = router;

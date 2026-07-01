@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const prisma = require("../config/prisma");
+const prisma = require("../../database/prisma");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -130,9 +130,15 @@ exports.login = async (req, res) => {
     /* Response */
     res.status(200).json({
       success: true,
-      message: "Login successful",
+
       token,
-      user,
+
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     console.log(error);

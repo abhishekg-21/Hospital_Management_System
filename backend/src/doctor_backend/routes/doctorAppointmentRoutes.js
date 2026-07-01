@@ -5,10 +5,12 @@ const express = require("express");
 
 const router = express.Router();
 
-const { getAppointments } = require("../controllers/appointmentController");
+const {
+  getTodayAppointments,
+} = require("../controllers/doctorAppointmentController");
 
-const authMiddleware = require("../middleware/authMiddleware");
+// Doctor today's checked-in patients
 
-router.get("/", authMiddleware, getAppointments);
+router.get("/today", getTodayAppointments);
 
 module.exports = router;

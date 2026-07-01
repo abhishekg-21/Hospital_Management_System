@@ -8,34 +8,34 @@ Here’s a solid architecture and roadmap you can follow.
 
 ## Frontend
 
-* Next.js
-* Tailwind CSS
-* Axios
-* React Hook Form
-* Zustand or Redux Toolkit
-* Chart.js / Recharts (dashboard analytics)
+- Next.js
+- Tailwind CSS
+- Axios
+- React Hook Form
+- Zustand or Redux Toolkit
+- Chart.js / Recharts (dashboard analytics)
 
 ## Backend
 
-* Node.js
-* Express.js
-* JWT Authentication
-* bcrypt
-* Multer (file uploads)
-* Nodemailer
+- Node.js
+- Express.js
+- JWT Authentication
+- bcrypt
+- Multer (file uploads)
+- Nodemailer
 
 ## Database
 
 Choose one:
 
-* PostgreSQL (Recommended)
-* MongoDB
+- PostgreSQL (Recommended)
+- MongoDB
 
 ## ORM
 
-* Prisma (best with PostgreSQL)
+- Prisma (best with PostgreSQL)
   or
-* Mongoose (MongoDB)
+- Mongoose (MongoDB)
 
 ---
 
@@ -43,12 +43,12 @@ Choose one:
 
 ## 1. Authentication
 
-* Admin Login
-* Doctor Login
-* Receptionist Login
-* Patient Login
-* JWT Authentication
-* Role-based access
+- Admin Login
+- Doctor Login
+- Receptionist Login
+- Patient Login
+- JWT Authentication
+- Role-based access
 
 ---
 
@@ -56,23 +56,23 @@ Choose one:
 
 Features:
 
-* Add patient
-* Edit patient
-* Delete patient
-* View patient history
-* Upload reports/documents
+- Add patient
+- Edit patient
+- Delete patient
+- View patient history
+- Upload reports/documents
 
 Fields:
 
-* Patient ID
-* Name
-* Age
-* Gender
-* Blood Group
-* Contact
-* Address
-* Disease
-* Admission Date
+- Patient ID
+- Name
+- Age
+- Gender
+- Blood Group
+- Contact
+- Address
+- Disease
+- Admission Date
 
 ---
 
@@ -80,19 +80,19 @@ Fields:
 
 Features:
 
-* Add doctor
-* Assign department
-* Manage schedules
-* View appointments
+- Add doctor
+- Assign department
+- Manage schedules
+- View appointments
 
 Fields:
 
-* Doctor ID
-* Name
-* Specialization
-* Experience
-* Fees
-* Availability
+- Doctor ID
+- Name
+- Specialization
+- Experience
+- Fees
+- Availability
 
 ---
 
@@ -100,10 +100,10 @@ Fields:
 
 Features:
 
-* Book appointment
-* Cancel appointment
-* Reschedule appointment
-* Doctor availability check
+- Book appointment
+- Cancel appointment
+- Reschedule appointment
+- Doctor availability check
 
 ---
 
@@ -111,10 +111,10 @@ Features:
 
 Features:
 
-* Generate invoices
-* Payment status
-* Treatment charges
-* Medicine charges
+- Generate invoices
+- Payment status
+- Treatment charges
+- Medicine charges
 
 ---
 
@@ -122,9 +122,9 @@ Features:
 
 Features:
 
-* Medicine inventory
-* Stock updates
-* Expiry tracking
+- Medicine inventory
+- Stock updates
+- Expiry tracking
 
 ---
 
@@ -132,9 +132,9 @@ Features:
 
 Features:
 
-* Upload test reports
-* Download reports
-* Assign tests
+- Upload test reports
+- Download reports
+- Assign tests
 
 ---
 
@@ -142,11 +142,11 @@ Features:
 
 Admin dashboard should show:
 
-* Total patients
-* Total doctors
-* Revenue
-* Appointments
-* Graphs and analytics
+- Total patients
+- Total doctors
+- Revenue
+- Appointments
+- Graphs and analytics
 
 ---
 
@@ -274,31 +274,31 @@ GET /api/appointments
 
 ## Public
 
-* Home
-* About
-* Contact
-* Login
+- Home
+- About
+- Contact
+- Login
 
 ## Admin
 
-* Dashboard
-* Patients
-* Doctors
-* Appointments
-* Billing
-* Reports
+- Dashboard
+- Patients
+- Doctors
+- Appointments
+- Billing
+- Reports
 
 ## Doctor
 
-* Schedule
-* Appointments
-* Patient Reports
+- Schedule
+- Appointments
+- Patient Reports
 
 ## Patient
 
-* Book Appointment
-* Medical Records
-* Bills
+- Book Appointment
+- Medical Records
+- Bills
 
 ---
 
@@ -322,17 +322,17 @@ Protected routes accessible
 
 You can create a modern UI like:
 
-* [Practo](https://www.practo.com?utm_source=chatgpt.com)
-* [Apollo Hospitals](https://www.apollohospitals.com?utm_source=chatgpt.com)
+- [Practo](https://www.practo.com?utm_source=chatgpt.com)
+- [Apollo Hospitals](https://www.apollohospitals.com?utm_source=chatgpt.com)
 
 Use:
 
-* Sidebar dashboard
-* Cards
-* Tables
-* Charts
-* Calendar
-* Notification system
+- Sidebar dashboard
+- Cards
+- Tables
+- Charts
+- Calendar
+- Notification system
 
 ---
 
@@ -340,31 +340,31 @@ Use:
 
 ## Phase 1
 
-* Setup frontend/backend
-* Authentication
-* Database connection
+- Setup frontend/backend
+- Authentication
+- Database connection
 
 ## Phase 2
 
-* Patient module
-* Doctor module
+- Patient module
+- Doctor module
 
 ## Phase 3
 
-* Appointment system
-* Dashboard analytics
+- Appointment system
+- Dashboard analytics
 
 ## Phase 4
 
-* Billing
-* Reports
-* File upload
+- Billing
+- Reports
+- File upload
 
 ## Phase 5
 
-* Deployment
-* Security
-* Optimization
+- Deployment
+- Security
+- Optimization
 
 ---
 
@@ -372,17 +372,17 @@ Use:
 
 ## Frontend
 
-* [Vercel](https://vercel.com?utm_source=chatgpt.com)
+- [Vercel](https://vercel.com?utm_source=chatgpt.com)
 
 ## Backend
 
-* [Render](https://render.com?utm_source=chatgpt.com)
-* [Railway](https://railway.app?utm_source=chatgpt.com)
+- [Render](https://render.com?utm_source=chatgpt.com)
+- [Railway](https://railway.app?utm_source=chatgpt.com)
 
 ## Database
 
-* [Neon PostgreSQL](https://neon.tech?utm_source=chatgpt.com)
-* [MongoDB Atlas](https://www.mongodb.com/atlas/database?utm_source=chatgpt.com)
+- [Neon PostgreSQL](https://neon.tech?utm_source=chatgpt.com)
+- [MongoDB Atlas](https://www.mongodb.com/atlas/database?utm_source=chatgpt.com)
 
 ---
 
@@ -390,14 +390,14 @@ Use:
 
 Add these advanced features:
 
-* Role-based dashboard
-* Real-time notifications
-* PDF report generation
-* Email appointment reminders
-* Search & filters
-* Dark mode
-* Responsive design
-* Audit logs
+- Role-based dashboard
+- Real-time notifications
+- PDF report generation
+- Email appointment reminders
+- Search & filters
+- Dark mode
+- Responsive design
+- Audit logs
 
 ---
 
@@ -405,10 +405,10 @@ Add these advanced features:
 
 Since you already worked with:
 
-* Spring Boot
-* PostgreSQL
-* Admin dashboards
-* Authentication systems
+- Spring Boot
+- PostgreSQL
+- Admin dashboards
+- Authentication systems
 
 I recommend:
 
@@ -438,23 +438,22 @@ If you want, I can also help you with:
 9. ER diagram
 10. Complete project starter code
 
-
 src/
 │
 ├── app/
-│   ├── admin/
-│   ├── doctor/
-│   ├── patient/
-│   ├── receptionist/
-│   ├── login/
-│   └── page.tsx
+│ ├── admin/
+│ ├── doctor/
+│ ├── patient/
+│ ├── receptionist/
+│ ├── login/
+│ └── page.tsx
 │
 ├── components/
-│   ├── common/
-│   ├── admin/
-│   ├── doctor/
-│   ├── patient/
-│   └── receptionist/
+│ ├── common/
+│ ├── admin/
+│ ├── doctor/
+│ ├── patient/
+│ └── receptionist/
 │
 ├── services/
 ├── store/
@@ -462,3 +461,29 @@ src/
 ├── utils/
 ├── types/
 └── styles/
+
+Patient Portal (view prescriptions + reports + appointment history)
+
+app/
+└── patient/
+├── layout.tsx
+├── dashboard/
+│ └── page.tsx
+│
+├── appointments/
+│ └── page.tsx
+│
+├── prescriptions/
+│ └── page.tsx
+│
+├── reports/
+│ └── page.tsx
+│
+├── payments/
+│ └── page.tsx
+│
+├── profile/
+│ └── page.tsx
+│
+└── settings/
+└── page.tsx

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 //  backend/src/Doctor_Backend/controllers/consultationController.js
 
-const prisma = require("../config/prisma");
+const prisma = require("../../database/prisma");
 
 /* =========================
    GET ALL CONSULTATIONS

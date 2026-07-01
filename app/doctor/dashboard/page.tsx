@@ -1,131 +1,94 @@
 /* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react-hooks/immutability */
 "use client";
 
-import {
-  FaUserMd,
-  FaCalendarCheck,
-  FaClipboardList,
-  FaFlask,
-  FaBell,
-  FaUserInjured,
-  FaHeartbeat,
-} from "react-icons/fa";
+import { useEffect, useState } from "react";
+
+import axios from "axios";
+
+interface Appointment {
+  id: string;
+
+  time: string;
+
+  patient: {
+    firstName: string;
+
+    lastName: string;
+
+    age: number;
+
+    gender: string;
+  };
+
+  status: string;
+}
 
 export default function DoctorDashboard() {
-  const stats = [
-    {
-      title: "Today's Appointments",
-      value: 24,
-      icon: <FaCalendarCheck size={24} />,
-    },
-    {
-      title: "Pending Consultations",
-      value: 8,
-      icon: <FaClipboardList size={24} />,
-    },
-    {
-      title: "Admitted Patients",
-      value: 12,
-      icon: <FaUserInjured size={24} />,
-    },
-    {
-      title: "New Lab Reports",
-      value: 6,
-      icon: <FaFlask size={24} />,
-    },
-    {
-      title: "Pending Prescriptions",
-      value: 4,
-      icon: <FaHeartbeat size={24} />,
-    },
-    {
-      title: "Emergency Cases",
-      value: 2,
-      icon: <FaBell size={24} />,
-    },
-  ];
+  const [patients, setPatients] = useState<Appointment[]>([]);
+
+  useEffect(() => {
+    loadPatients();
+  }, []);
+
+  const loadPatients = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(
+      "http://localhost:5000/api/doctor/appointments/today",
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    setPatients(response.data);
+  };
 
   return (
-    <div className="space-y-8">
-      {/* Statistics */}
+    <div>
+      <h1 className="text-3xl font-bold mb-6">Today's Patients</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {stats.map((item, index) => (
-          <div key={index} className="bg-white p-6 rounded-2xl shadow">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-gray-500">{item.title}</h3>
-
-                <p className="text-3xl font-bold mt-2">{item.value}</p>
-              </div>
-
-              <div className="text-blue-600">{item.icon}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Today's Schedule */}
-
-      <div className="bg-white rounded-2xl shadow p-6">
-        <h2 className="text-xl font-bold mb-4">Today's Appointments</h2>
-
+      <div className="bg-white shadow rounded-xl">
         <table className="w-full">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left py-3">Patient</th>
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-4">Time</th>
 
-              <th className="text-left py-3">Time</th>
+              <th>Patient</th>
 
-              <th className="text-left py-3">Department</th>
+              <th>Age</th>
 
-              <th className="text-left py-3">Status</th>
+              <th>Gender</th>
+
+              <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr className="border-b">
-              <td className="py-3">John Smith</td>
-              <td>10:00 AM</td>
-              <td>Cardiology</td>
-              <td>Pending</td>
-            </tr>
+            {patients.map((p) => (
+              <tr key={p.id} className="border-t">
+                <td className="p-4">{p.time}</td>
 
-            <tr className="border-b">
-              <td className="py-3">Sarah Wilson</td>
-              <td>11:30 AM</td>
-              <td>Neurology</td>
-              <td>Completed</td>
-            </tr>
+                <td>
+                  {p.patient.firstName} {p.patient.lastName}
+                </td>
 
-            <tr>
-              <td className="py-3">David Lee</td>
-              <td>02:00 PM</td>
-              <td>General</td>
-              <td>Pending</td>
-            </tr>
+                <td>{p.patient.age}</td>
+
+                <td>{p.patient.gender}</td>
+
+                <td>
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded">
+                    Start Consultation
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Notifications */}
-
-      <div className="bg-white rounded-2xl shadow p-6">
-        <h2 className="text-xl font-bold mb-4">Notifications</h2>
-
-        <div className="space-y-3">
-          <div className="border-l-4 border-red-500 bg-red-50 p-3 rounded">
-            Emergency admission received.
-          </div>
-
-          <div className="border-l-4 border-blue-500 bg-blue-50 p-3 rounded">
-            3 new lab reports available.
-          </div>
-
-          <div className="border-l-4 border-green-500 bg-green-50 p-3 rounded">
-            Follow-up patient due tomorrow.
-          </div>
-        </div>
       </div>
     </div>
   );

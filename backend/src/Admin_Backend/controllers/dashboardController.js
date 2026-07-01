@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const prisma = require("../config/prisma");
+const prisma = require("../../database/prisma");
 
 exports.getDashboardStats = async (req, res) => {
   try {

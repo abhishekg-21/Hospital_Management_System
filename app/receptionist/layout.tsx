@@ -1,5 +1,6 @@
-// import ReceptionistSidebar from "@/components/receptionist/ReceptionistSidebar";
-import Header from "@/components/common/Header";
+//  app/receptionist/layout.tsx
+
+import Link from "next/link";
 
 export default function ReceptionistLayout({
   children,
@@ -8,13 +9,23 @@ export default function ReceptionistLayout({
 }) {
   return (
     <div className="flex">
-      {/* <ReceptionistSidebar /> */}
+      <aside className="w-72 bg-blue-700 min-h-screen text-white p-5">
+        <h1 className="text-2xl font-bold mb-8">Reception</h1>
 
-      <div className="flex-1 bg-gray-100 min-h-screen">
-        <Header />
+        <div className="space-y-3">
+          <Link href="/receptionist/dashboard">Dashboard</Link>
 
-        <main className="p-6">{children}</main>
-      </div>
+          <Link href="/receptionist/patients">Register Patient</Link>
+
+          <Link href="/receptionist/appointments">Appointments</Link>
+
+          <Link href="/receptionist/checkin">Check In</Link>
+
+          <Link href="/receptionist/billing">Billing</Link>
+        </div>
+      </aside>
+
+      <main className="flex-1 p-8">{children}</main>
     </div>
   );
 }

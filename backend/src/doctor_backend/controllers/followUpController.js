@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 //  backend/src/docto_backend/controllers/followUpController.js
 
-const prisma = require("../config/prisma");
+const prisma = require("../../database/prisma");
 
 /* =========================
    GET FOLLOWUPS

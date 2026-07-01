@@ -8,11 +8,11 @@ const authRoutes = require("./Admin_Backend/routes/authRoutes");
 
 const app = express();
 
-/* Middleware */
+/* ── Core Middleware ────────────────────────────────────── */
 app.use(cors());
 app.use(express.json());
 
-/* Test Route */
+/* ── Health Check ───────────────────────────────────────── */
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -20,84 +20,128 @@ app.get("/", (req, res) => {
   });
 });
 
-/* API Routes */
+/* ── API Routes ─────────────────────────────────────────── */
+
 app.use("/api/auth", authRoutes);
 
-/* Server */
-const PORT = process.env.PORT || 5000;
+const userRoutes = require("./Admin_Backend/routes/userRoutes");
+app.use("/api/users", userRoutes);
 
+/* Admin Dashboard */
+const dashboardRoutes = require("./Admin_Backend/routes/dashboardRoutes");
+app.use("/api/dashboard", dashboardRoutes);
+
+/* Appointments */
+const appointmentRoutes = require("./Admin_Backend/routes/appointmentRoutes");
+app.use("/api/appointments", appointmentRoutes);
+
+/* Departments */
+const departmentRoutes = require("./Admin_Backend/routes/departmentRoutes");
+app.use("/api/departments", departmentRoutes);
+
+/* Doctor Appointments */
+app.use(
+  "/api/doctor/appointments",
+  require("./doctor_backend/routes/doctorAppointmentRoutes"),
+);
+
+const patientRoute = require("./Admin_Backend/routes/patientRoutes");
+
+app.use("/api/patients", patientRoute);
+
+/* Patients */
+const patientRoutes = require("./patient_backend/routes/patientRoutes");
+app.use("/api/patient", patientRoutes);
+
+/* Doctors */
+const doctorRoutes = require("./Admin_Backend/routes/doctorRoutes");
+app.use("/api/doctors", doctorRoutes);
+
+/* Consultations */
+const consultationRoutes = require("./doctor_backend/routes/consultationRoutes");
+app.use("/api/consultations", consultationRoutes);
+
+/* Prescriptions */
+const prescriptionRoutes = require("./doctor_backend/routes/prescriptionRoutes");
+app.use("/api/prescriptions", prescriptionRoutes);
+
+/* Lab */
+const labRoutes = require("./doctor_backend/routes/labRoutes");
+app.use("/api/labs", labRoutes);
+
+/* Follow-ups */
+const followUpRoutes = require("./doctor_backend/routes/followUpRoutes");
+app.use("/api/followups", followUpRoutes);
+
+/* Admissions */
+const admissionRoutes = require("./doctor_backend/routes/admissionRoutes");
+app.use("/api/admissions", admissionRoutes);
+
+/* Billing */
+const billRoutes = require("./Admin_Backend/routes/billRoutes");
+app.use("/api/bill", billRoutes);
+
+/* ── 404 Handler ────────────────────────────────────────── */
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
+  });
+});
+
+/* ── Global Error Handler ───────────────────────────────── */
+/*
+  Catches any error passed via next(error) from any route or
+  middleware. Keeps error responses consistent across the whole
+  API without touching individual controllers.
+*/
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error("[GlobalErrorHandler]", err);
+
+  /* Prisma known-request errors (e.g. record not found) */
+  if (err.code === "P2025") {
+    return res.status(404).json({
+      success: false,
+      message: "Record not found.",
+    });
+  }
+
+  /* Prisma unique constraint violation */
+  if (err.code === "P2002") {
+    const field = err.meta?.target?.join(", ") || "field";
+    return res.status(409).json({
+      success: false,
+      message: `A record with this ${field} already exists.`,
+    });
+  }
+
+  /* JWT / auth errors */
+  if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token. Please log in again.",
+    });
+  }
+
+  /* Validation errors (e.g. from express-validator if added later) */
+  if (err.type === "validation") {
+    return res.status(422).json({
+      success: false,
+      message: err.message || "Validation failed.",
+      errors: err.errors || [],
+    });
+  }
+
+  /* Default 500 */
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal server error.",
+  });
+});
+
+/* ── Start Server ───────────────────────────────────────── */
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-const userRoutes = require("./Admin_Backend/routes/userRoutes");
-
-app.use("/api/users", userRoutes);
-
-/* Admin Dashboard Overview */
-const dashboardRoutes = require("./Admin_Backend/routes/dashboardRoutes");
-
-/* API Route of Admin Dashboard */
-app.use("/api/dashboard", dashboardRoutes);
-
-/* Admin Dashboard Appointment Overview */
-const appointmentRoutes = require("./Admin_Backend/routes/appointmentRoutes");
-
-/* API Route of Admin Dashboard Appointment */
-app.use("/api/appointments", appointmentRoutes);
-
-/* Admin Dashboard Overview doctor_department */
-const departmentRoutes = require("./Admin_Backend/routes/departmentRoutes");
-
-/* API Route of Admin Dashboard doctor_department */
-app.use("/api/departments", departmentRoutes);
-
-/* Doctor Dashboard Overview */
-// const doctor_appointmentRoutes = require("./doctor_backend/routes/appointmentRoutes");
-
-/* API Route of Doctor Dashboard */
-// app.use("/api/appointment", doctor_appointmentRoutes);
-
-/* Patient Dashboard Overview */
-const patientRoutes = require("./patient_backend/routes/patientRoutes");
-
-/* API Route of Patient Dashboard */
-app.use("/api/patients", patientRoutes);
-
-/* Admin Dashboard Doctor Overview */
-const doctorRoutes = require("./Admin_Backend/routes/doctorRoutes");
-
-/* API Route of Admin Dashboard Doctor*/
-app.use("/api/doctors", doctorRoutes);
-
-/* Doctor Dashboard Consultation Overview */
-const consultationRoutes = require("./doctor_backend/routes/consultationRoutes");
-
-/* API Route of Doctor Dashboard Consultation*/
-app.use("/api/consultations", consultationRoutes);
-
-/* Doctor Dashboard Prescription Overview */
-const prescriptionRoutes = require("./doctor_backend/routes/prescriptionRoutes");
-
-/* API Route of Doctor Dashboard Prescription*/
-app.use("/api/prescriptions", prescriptionRoutes);
-
-/* Doctor Dashboard lab_reports Overview */
-const labRoutes = require("./doctor_backend/routes/labRoutes");
-
-/* API Route of Doctor Dashboard lab_reports*/
-app.use("/api/labs", labRoutes);
-
-/* Doctor Dashboard follow-up Overview */
-const followUpRoutes = require("./doctor_backend/routes/followUpRoutes");
-
-/* API Route of Doctor Dashboard follow-up*/
-app.use("/api/followups", followUpRoutes);
-
-const admissionRoutes = require("./doctor_backend/routes/admissionRoutes");
-
-app.use("/api/admissions", admissionRoutes);
-
-const billRoutes = require("./Admin_Backend/routes/billRoutes");
-
-app.use("/api/bill", billRoutes);

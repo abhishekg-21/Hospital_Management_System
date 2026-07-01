@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 //  backed/src/Admin_Backend/controllers/departmentController.js
 
-const prisma = require("../config/prisma");
+const prisma = require("../../database/prisma");
 
 /* =========================
    GET ALL DEPARTMENTS

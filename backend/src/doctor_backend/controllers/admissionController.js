@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 //  backend/src/doctor_backend/controllers/admissionController.js
 
-const prisma = require("../config/prisma");
+const prisma = require("../../database/prisma");
 
 /* GET ADMISSIONS */
 

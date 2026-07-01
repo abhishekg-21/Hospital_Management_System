@@ -1,42 +1,24 @@
-exports.createBill = async (req, res) => {
-  try {
-    const {
-      patientId,
-      consultationFee,
-      labFee,
-      roomFee,
-      medicineFee,
-      otherCharges,
-    } = req.body;
+/* eslint-disable @typescript-eslint/no-require-imports */
+const express = require("express");
 
-    const count = await prisma.bill.count();
+const router = express.Router();
 
-    const billNumber = `BILL${String(count + 1).padStart(4, "0")}`;
+const {
+  getBills,
 
-    const totalAmount =
-      Number(consultationFee) +
-      Number(labFee) +
-      Number(roomFee) +
-      Number(medicineFee) +
-      Number(otherCharges);
+  createBill,
 
-    const bill = await prisma.bill.create({
-      data: {
-        billNumber,
-        patientId,
-        consultationFee,
-        labFee,
-        roomFee,
-        medicineFee,
-        otherCharges,
-        totalAmount,
-      },
-    });
+  updateBill,
 
-    res.status(201).json(bill);
-  } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
-  }
-};
+  deleteBill,
+} = require("../controllers/billController");
+
+router.get("/", getBills);
+
+router.post("/", createBill);
+
+router.put("/:id", updateBill);
+
+router.delete("/:id", deleteBill);
+
+module.exports = router;

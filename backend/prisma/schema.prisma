@@ -20,13 +20,6 @@ enum Role {
   RECEPTIONIST
 }
 
-enum AppointmentStatus {
-  PENDING
-  CONFIRMED
-  COMPLETED
-  CANCELLED
-}
-
 enum LabStatus {
   PENDING
   SAMPLE_COLLECTED
@@ -66,73 +59,100 @@ model User {
 
   role Role
 
+  doctor Doctor?
+  patient Patient?
+
   createdAt DateTime @default(now())
 }
 
 model Patient {
-  id             String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  patientCode    String   @unique
+  userId String? @unique
 
-  firstName      String
-  lastName       String
+  user User? @relation(fields:[userId], references:[id])
 
-  age            Int
-  gender         String
+  patientCode String @unique
 
-  bloodGroup     String?
+  firstName String
+  lastName  String
 
-  phone          String
-  email          String?
+  age    Int
+  gender String
 
-  address        String
+  bloodGroup String?
+
+  phone String
+  email String?
+
+  address String
 
   emergencyPhone String?
 
-  allergies      String?
+  allergies String?
 
   diseaseHistory String?
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   appointments Appointment[]
+
   labRequests LabRequest[]
+
+  labReports LabReport[]
+
   followUps FollowUp[]
+
   admissions Admission[]
-   bills Bill[]
+
+  bills Bill[]
+
+  payments Payment[]
 }
 
 model Doctor {
-  id             String      @id @default(cuid())
+  id String @id @default(cuid())
+  
+  userId String @unique
 
-  doctorCode     String      @unique
+  user User @relation(fields:[userId], references:[id])
 
-  name           String
-  email          String      @unique
+  doctorCode String @unique
+
+  name  String
+  email String @unique
 
   specialization String
 
-  experience     Int
+  experience Int
 
-  qualification  String?
+  qualification String?
 
-  phone          String
+  phone String
 
-  gender         String?
+  gender String?
 
-  address        String?
+  address String?
 
-  departmentId   String
+  departmentId String
 
-  department     Department  @relation(fields: [departmentId], references: [id])
+  department Department @relation(fields: [departmentId], references: [id])
 
-  appointments   Appointment[]
-  labRequests LabRequest[]
-  followUps FollowUp[]
-  admissions Admission[]
+  appointments Appointment[]
+  labRequests  LabRequest[]
+  followUps    FollowUp[]
+  admissions   Admission[]
 
-  createdAt      DateTime    @default(now())
+  createdAt DateTime @default(now())
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  COMPLETED
+  CANCELLED
 }
 
 model Appointment {
@@ -141,14 +161,18 @@ model Appointment {
   patientId String
   doctorId  String
 
-  date       DateTime
-  time       String
-  department String
+  date DateTime
+  time String
 
-   status AppointmentStatus @default(PENDING)
+  tokenNumber Int?
+
+  checkedIn Boolean @default(false)
+
+  status AppointmentStatus @default(PENDING)
 
   patient Patient @relation(fields: [patientId], references: [id])
-  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
 
   consultation Consultation?
 
@@ -160,14 +184,14 @@ model Consultation {
 
   appointmentId String @unique
 
-  symptoms String?
+  symptoms  String?
   diagnosis String?
-  notes String?
+  notes     String?
 
   bloodPressure String?
-  pulse String?
-  temperature String?
-  oxygenLevel String?
+  pulse         String?
+  temperature   String?
+  oxygenLevel   String?
 
   height String?
   weight String?
@@ -200,14 +224,14 @@ model Department {
   description String?
   createdAt   DateTime @default(now())
 
-  doctors     Doctor[]
+  doctors Doctor[]
 }
 
 model LabRequest {
   id String @id @default(cuid())
 
   patientId String
-  doctorId String
+  doctorId  String
 
   testName String
 
@@ -224,25 +248,11 @@ model LabRequest {
   createdAt DateTime @default(now())
 }
 
-model LabReport {
-  id String @id @default(cuid())
-
-  labRequestId String @unique
-
-  result String
-
-  reportFile String?
-
-  labRequest LabRequest @relation(fields: [labRequestId], references: [id])
-
-  createdAt DateTime @default(now())
-}
-
 model FollowUp {
   id String @id @default(cuid())
 
   patientId String
-  doctorId String
+  doctorId  String
 
   nextVisitDate DateTime
 
@@ -266,7 +276,7 @@ model Room {
 
   wardId String
 
-  ward Ward @relation(  fields: [wardId],  references: [id])
+  ward Ward @relation(fields: [wardId], references: [id])
 
   beds Bed[]
 
@@ -285,7 +295,6 @@ model Ward {
   createdAt DateTime @default(now())
 }
 
-
 model Bed {
   id String @id @default(cuid())
 
@@ -295,7 +304,7 @@ model Bed {
 
   status BedStatus @default(AVAILABLE)
 
-  room Room @relation( fields: [roomId],  references: [id]  )
+  room Room @relation(fields: [roomId], references: [id])
 
   admissions Admission[]
 }
@@ -317,11 +326,11 @@ model Admission {
 
   status AdmissionStatus @default(ADMITTED)
 
-  patient Patient @relation(  fields: [patientId],  references: [id]  )
+  patient Patient @relation(fields: [patientId], references: [id])
 
-  doctor Doctor @relation(  fields: [doctorId],  references: [id])
+  doctor Doctor @relation(fields: [doctorId], references: [id])
 
-  bed Bed @relation(  fields: [bedId],  references: [id])
+  bed Bed @relation(fields: [bedId], references: [id])
 
   createdAt DateTime @default(now())
 }
@@ -333,7 +342,7 @@ model Bill {
 
   patientId String
 
-  patient Patient @relation(fields: [patientId],  references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
 
   consultationFee Float @default(0)
 
@@ -352,4 +361,38 @@ model Bill {
   paymentStatus PaymentStatus @default(PENDING)
 
   createdAt DateTime @default(now())
+}
+
+model LabReport {
+  id String @id @default(cuid())
+
+  patientId String
+
+  labRequestId String @unique
+
+  testName String
+
+  result String?
+
+  fileUrl String?
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  labRequest LabRequest @relation(fields: [labRequestId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id String @id @default(cuid())
+
+  patientId String
+
+  amount Float
+
+  status String @default("PENDING")
+
+  paymentDate DateTime @default(now())
+
+  patient Patient @relation(fields: [patientId], references: [id])
 }
