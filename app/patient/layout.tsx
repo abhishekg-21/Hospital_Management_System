@@ -1,19 +1,31 @@
-import Sidebar from "@/components/common/Sidebar";
-import Header from "@/components/common/Header";
+// app/admin/layout.tsx
+"use client";
+import { useState } from "react";
+import Sidebar from "../../components/common/Sidebar";
+import Header from "../../components/common/Header";
 
-export default function PatientLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <div className="flex">
-      <Sidebar />
-
-      <div className="flex-1">
-        <Header />
-
-        <main className="p-6 bg-gray-100 min-h-screen">{children}</main>
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      <Sidebar
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
+      />
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <Header onMobileMenuOpen={() => setMobileOpen(true)} />
+        <main style={{ flex: 1, overflowY: "auto" }}>{children}</main>
       </div>
     </div>
   );

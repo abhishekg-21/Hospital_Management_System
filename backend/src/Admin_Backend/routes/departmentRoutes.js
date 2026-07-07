@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-//  backed/src/Admin_Backend/routes/departmentRoutes.js
-const express = require("express");
+// backend/src/Admin_Backend/routes/departmentRoutes.js
 
+const express = require("express");
 const router = express.Router();
 
 const {
   getDepartments,
+  getDepartmentById,
+  getDepartmentStats,
   createDepartment,
   updateDepartment,
   deleteDepartment,
@@ -13,20 +15,19 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 
-/* GET */
+/*
+  Static paths MUST come before /:id to prevent Express from
+  treating "stats" as an id parameter value.
+*/
 
-router.get("/", authMiddleware, getDepartments);
+/* ── Collection ────────────────────────────────────────────── */
+router.get("/", authMiddleware, getDepartments); // existing + search/filter/pagination
+router.post("/", authMiddleware, createDepartment); // existing + case-insensitive dupe check
 
-/* CREATE */
-
-router.post("/", authMiddleware, createDepartment);
-
-/* UPDATE */
-
-router.put("/:id", authMiddleware, updateDepartment);
-
-/* DELETE */
-
-router.delete("/:id", authMiddleware, deleteDepartment);
+/* ── Single resource ───────────────────────────────────────── */
+router.get("/:id", authMiddleware, getDepartmentById); // new — full profile with doctors list
+router.get("/:id/stats", authMiddleware, getDepartmentStats); // new — stats for dashboard card
+router.put("/:id", authMiddleware, updateDepartment); // existing + field whitelist + name uniqueness
+router.delete("/:id", authMiddleware, deleteDepartment); // existing + doctor count safety guard
 
 module.exports = router;

@@ -1898,11 +1898,11 @@ export default function AppointmentsPage() {
     try {
       const [apptRes, patRes, docRes] = await Promise.all([
         axios.get(`${API}/appointments`, { headers: authHeaders() }),
-        axios.get(`${API}/patient`, { headers: authHeaders() }),
+        axios.get(`${API}/patients`, { headers: authHeaders() }),
         axios.get(`${API}/doctors`, { headers: authHeaders() }),
       ]);
-      setAppointments(apptRes.data);
-      setPatients(patRes.data);
+      setAppointments(apptRes.data.data.appointments);
+      setPatients(patRes.data.data.patients);
       setDoctors(docRes.data);
     } catch {
       addToast("error", "Failed to load data");
@@ -2321,9 +2321,11 @@ export default function AppointmentsPage() {
                             color: "#1e293b",
                           }}
                         >
-                          {appt.patient.firstName} {appt.patient.lastName}
+                          {appt.patient
+                            ? `${appt.patient.firstName} ${appt.patient.lastName}`
+                            : "Unknown Patient"}
                         </div>
-                        {appt.patient.patientCode && (
+                        {appt.patient?.patientCode && (
                           <div
                             style={{
                               fontSize: 11.5,
@@ -2343,9 +2345,9 @@ export default function AppointmentsPage() {
                             color: "#1e293b",
                           }}
                         >
-                          Dr. {appt.doctor.name}
+                          Dr. {appt.doctor?.name ?? "Unknown Doctor"}
                         </div>
-                        {appt.doctor.doctorCode && (
+                        {appt.doctor?.doctorCode && (
                           <div
                             style={{
                               fontSize: 11.5,

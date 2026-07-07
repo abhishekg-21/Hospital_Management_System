@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const express = require("express");
+// backend/src/Admin_Backend/routes/dashboardRoutes.js
 
+const express = require("express");
 const router = express.Router();
 
-/* CONTROLLER */
-
-const { getDashboardStats } = require("../controllers/dashboardController");
-
-/* MIDDLEWARE */
+const {
+  getDashboardStats, // original — kept intact
+  getDashboardSummary, // new aggregated endpoint
+} = require("../controllers/dashboardController");
 
 const authMiddleware = require("../middleware/authMiddleware");
 
-/* ROUTE */
-
+/* Original endpoint — unchanged, existing frontend keeps working */
 router.get("/stats", authMiddleware, getDashboardStats);
+
+/* New single-call aggregated endpoint for the upgraded dashboard */
+router.get("/summary", authMiddleware, getDashboardSummary);
 
 module.exports = router;

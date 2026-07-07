@@ -114,9 +114,9 @@ model Patient {
 model Doctor {
   id String @id @default(cuid())
   
-  userId String @unique
+  userId String? @unique
 
-  user User @relation(fields:[userId], references:[id])
+  user User? @relation(fields:[userId], references:[id])
 
   doctorCode String @unique
 
@@ -136,6 +136,13 @@ model Doctor {
   address String?
 
   departmentId String
+
+  consultationFee  Float?
+  licenseNumber    String?  @unique
+  status           String   @default("ACTIVE")  // "ACTIVE" | "INACTIVE"
+  weeklySchedule   Json?    // { workingDays: ["Mon","Tue",...], slotStart: "09:00", slotEnd: "17:00" }
+  photoUrl         String?
+  dateOfBirth      DateTime?
 
   department Department @relation(fields: [departmentId], references: [id])
 
